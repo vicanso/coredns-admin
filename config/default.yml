@@ -1,0 +1,16 @@
+log:
+  # http log format
+  http: :method :url :status :length :response-time ms ":referrer"
+  level: info
+# 程序监控端口
+port: 5018
+# 程序url前缀
+appPrefix: /api
+# mongodb连接串
+mongo: mongodb://127.0.0.1/coredns?connectTimeoutMS=10000
+# redis连接串
+redis: redis://127.0.0.1/
+adminPath: /admin
+cookieSigKeys:
+  - cuttle-fish
+  - tree.xie

@@ -1,0 +1,57 @@
+{
+  "name": "spt-admin",
+  "version": "0.1.0",
+  "scripts": {
+    "format": "node node_modules/.bin/prettier --write *.js */*.js */*.vue */*/*.js */**/*.vue",
+    "dev": "node node_modules/.bin/vue-cli-service serve --open",
+    "build": "NODE_ENV=production node node_modules/.bin/vue-cli-service build",
+    "lint": "yarn format && node node_modules/.bin/vue-cli-service lint"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.0.0-beta.6",
+    "@vue/cli-plugin-eslint": "^3.0.0-beta.6",
+    "@vue/cli-service": "^3.0.0-beta.6",
+    "axios": "^0.18.0",
+    "element-ui": "^2.4.4",
+    "json-diff": "^0.5.2",
+    "lodash": "^4.17.10",
+    "node-sass": "^4.9.2",
+    "prettier": "^1.13.7",
+    "pug": "^2.0.3",
+    "pug-plain-loader": "^1.0.0",
+    "sass-loader": "^7.0.3",
+    "vue": "^2.5.16",
+    "vue-router": "^3.0.1",
+    "vue-template-compiler": "^2.5.16",
+    "vuex": "^3.0.1",
+    "vuex-router-sync": "^5.0.0"
+  },
+  "license": "MIT",
+  "babel": {
+    "presets": [
+      "@vue/app"
+    ]
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "globals": {
+      "ENV": true,
+      "APP": true
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
+}
