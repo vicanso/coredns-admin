@@ -4,6 +4,9 @@
 
 import client from '../helpers/redis';
 
+const CaptchaPrefix = 'captcha';
+const ResetPasswordPrefix = 'reset-password';
+
 /**
  * 获取session信息
  *
@@ -21,7 +24,7 @@ export async function getSession(key) {
  * @param {String} code
  */
 export async function setCaptcha(key, code) {
-  await client.setex(`captcha-${key}`, 300, code);
+  await client.setex(`${CaptchaPrefix}-${key}`, 300, code);
 }
 
 /**
@@ -32,7 +35,7 @@ export async function setCaptcha(key, code) {
  * @param {Boolean} once 是否仅使用一次
  */
 export async function validateCaptcha(key, code, once) {
-  const id = `captcha-${key}`;
+  const id = `${CaptchaPrefix}-${key}`;
   const result = await client.get(id);
   if (!result) {
     return false;
@@ -53,7 +56,7 @@ export async function validateCaptcha(key, code, once) {
  * @param {String} account
  */
 export async function setResetPasswordToken(key, account) {
-  await client.setex(`reset-password-${key}`, 30 * 60, account);
+  await client.setex(`${ResetPasswordPrefix}-${key}`, 30 * 60, account);
 }
 
 /**
@@ -63,7 +66,7 @@ export async function setResetPasswordToken(key, account) {
  * @return {String} account
  */
 export async function getResetPasswordAccount(key) {
-  const id = `reset-password-${key}`;
+  const id = `${ResetPasswordPrefix}-${key}`;
   const account = await client.get(id);
   if (!account) {
     return null;

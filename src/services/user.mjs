@@ -7,9 +7,10 @@ import location from './location';
 import influx from '../helpers/influx';
 import {isProduction} from '../helpers/utils';
 import logger from '../helpers/logger';
+import {User, Login} from '../models/names';
 
-const userService = genService('User');
-const loginService = genService('Login');
+const userService = genService(User);
+const loginService = genService(Login);
 
 export default userService;
 

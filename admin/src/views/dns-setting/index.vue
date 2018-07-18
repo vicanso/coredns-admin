@@ -1,5 +1,6 @@
 <template lang="pug">
 .dnsSettingPage
+  h3.tac DNS Setting 
 
 </template>
 

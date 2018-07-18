@@ -72,7 +72,7 @@ export default category =>
     } catch (err) {
       data.body = {
         message: err.message,
-        status: ctx.status,
+        status: err.status || err.statusCode || 500,
       };
       throw err;
     } finally {

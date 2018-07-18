@@ -30,11 +30,7 @@ const mutations = {
 };
 
 const userGetInfo = async ({commit}) => {
-  const res = await request.get(USERS_ME, {
-    params: {
-      'cache-control': 'no-cache',
-    },
-  });
+  const res = await request.get(USERS_ME);
   commit(USER_INFO, res.data);
 };
 
@@ -50,11 +46,7 @@ const userRegister = async ({commit}, {account, password, email}) => {
 
 // 用户登录
 const userLogin = async ({commit}, {account, password}) => {
-  let res = await request.get(USERS_LOGIN, {
-    params: {
-      'cache-control': 'no-cache',
-    },
-  });
+  let res = await request.get(USERS_LOGIN);
   const token = res.data.token;
   const code = sha256(genPassword(account, password) + token);
   res = await request.post(USERS_LOGIN, {

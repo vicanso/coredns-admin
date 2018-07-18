@@ -8,7 +8,6 @@ import koaSession from 'koa-session';
 import * as config from '../config';
 import errors from '../errors';
 import influx from '../helpers/influx';
-import {isNoCache} from '../helpers/utils';
 import {sessionStore} from '../helpers/redis';
 
 let sessionMiddleware = null;
@@ -21,7 +20,6 @@ export function init(app) {
     key: config.session.key,
     maxAge: config.session.maxAge,
     beforeSave: (ctx, session) => {
-      // session中不要添加 createdAt 与 updatedAt 字段
       if (!session.createdAt) {
         // eslint-disable-next-line
         session.createdAt = new Date().toISOString();
@@ -34,8 +32,6 @@ export function init(app) {
 
 /**
  * session中间件，由于用到session的接口都是基于用户的，因此都是不能在`varnish`中做缓存，
- * 因此此中间件会校验请求的Header是否有设置为`Cache-Control:no-cache`
- * 或者querystring中`cache-control=no-cache`，如果两者都没有，则返回出错。
  * 在成功获取session之后，会将请求时间等写到influxdb中做统计
  * @param  {Object}   ctx  koa context
  * @param  {Function} next koa next
@@ -45,10 +41,6 @@ const normal = (ctx, next) => {
   if (ctx.session) {
     return next();
   }
-  if (!isNoCache(ctx)) {
-    throw errors.get('common.requestMustNoCache');
-  }
-  delete ctx.query['cache-control'];
   const startedAt = Date.now();
   const {timing} = ctx.state;
   const end = timing.start('session');

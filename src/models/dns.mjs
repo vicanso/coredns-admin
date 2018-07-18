@@ -1,23 +1,31 @@
 import mongoose from 'mongoose';
 
-import {I18n} from './names';
+import {DNS} from './names';
 
 const {Schema} = mongoose;
 
 const schema = {
-  name: {
+  // 域名
+  domain: {
     type: String,
     required: true,
   },
-  // 该字段分类，方便可以直接把所有分类的取出
-  category: {
+  ttl: {
+    type: Number,
+    required: true,
+  },
+  // 检测条件
+  check: {
     type: String,
     required: true,
   },
-  // 英文
-  en: String,
-  // 中文
-  zh: String,
+  // 是否禁用
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  // host配置
+  hosts: [],
   creator: {
     type: String,
     required: true,
@@ -30,32 +38,14 @@ export default function init() {
   });
   s.index(
     {
-      category: 1,
+      domain: 1,
     },
     {
-      background: true,
-    },
-  );
-  s.index(
-    {
-      name: 1,
-    },
-    {
-      background: true,
-    },
-  );
-  s.index(
-    {
-      category: 1,
-      name: 1,
-    },
-    {
-      background: true,
       unique: true,
     },
   );
   return {
-    name: I18n,
+    name: DNS,
     schema: s,
   };
 }

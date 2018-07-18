@@ -57,7 +57,6 @@ export default {
           conditions.account = account;
         }
         const params = {
-          'cache-control': 'no-cache',
         };
         if (!_.isEmpty(conditions)) {
           params.conditions = JSON.stringify(conditions);

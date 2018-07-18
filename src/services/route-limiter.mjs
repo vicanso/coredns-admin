@@ -1,8 +1,9 @@
 import _ from 'lodash';
 
 import genService from './gen';
+import {RouteLimiter} from '../models/names';
 
-const routeLimiterService = genService('RouteLimiter');
+const routeLimiterService = genService(RouteLimiter);
 
 const {find} = routeLimiterService;
 

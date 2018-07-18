@@ -1,11 +1,10 @@
 import mongoose from 'mongoose';
 
-import {isDevelopment} from '../helpers/utils';
+import {Mock} from './names';
 
 const {Schema} = mongoose;
 
 const {Mixed} = Schema.Types;
-const name = 'Mock';
 
 const schema = {
   account: String,
@@ -33,7 +32,6 @@ const schema = {
 export default function init() {
   const s = new Schema(schema, {
     timestamps: true,
-    autoIndex: isDevelopment(),
   });
   s.index(
     {
@@ -47,7 +45,7 @@ export default function init() {
     },
   );
   return {
-    name,
+    name: Mock,
     schema: s,
   };
 }

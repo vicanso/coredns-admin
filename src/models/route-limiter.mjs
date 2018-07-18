@@ -1,12 +1,10 @@
 import mongoose from 'mongoose';
 
-import {isDevelopment} from '../helpers/utils';
+import {RouteLimiter} from './names';
 
 const {Schema} = mongoose;
 
 const {String} = Schema.Types;
-
-const name = 'RouteLimiter';
 
 const schema = {
   name: {
@@ -44,10 +42,9 @@ const schema = {
 export default function init() {
   const s = new Schema(schema, {
     timestamps: true,
-    autoIndex: isDevelopment(),
   });
   return {
-    name,
+    name: RouteLimiter,
     schema: s,
   };
 }

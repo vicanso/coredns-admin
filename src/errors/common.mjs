@@ -95,4 +95,10 @@ export default {
     ch: '此功能暂时限制使用',
     status: 500,
   },
+  corednsNotSet: {
+    code: 17,
+    en: 'the setting of coredns is not seted',
+    ch: '未配置coredns的配置',
+    status: 500,
+  },
 };

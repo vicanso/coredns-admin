@@ -1,11 +1,9 @@
 import mongoose from 'mongoose';
-
-import {isDevelopment} from '../helpers/utils';
+import {Setting} from './names';
 
 const {Schema} = mongoose;
 
 const {Mixed} = Schema.Types;
-const name = 'Setting';
 
 const schema = {
   // 应用配置名称，用于区分不同的配置
@@ -29,10 +27,9 @@ const schema = {
 export default function init() {
   const s = new Schema(schema, {
     timestamps: true,
-    autoIndex: isDevelopment(),
   });
   return {
-    name,
+    name: Setting,
     schema: s,
   };
 }

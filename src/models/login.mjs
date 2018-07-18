@@ -1,9 +1,8 @@
 import mongoose from 'mongoose';
 
-import {isDevelopment} from '../helpers/utils';
+import {Login} from './names';
 
 const {Schema} = mongoose;
-const name = 'Login';
 
 const schema = {
   // 账号
@@ -36,7 +35,6 @@ const schema = {
 export default function init() {
   const s = new Schema(schema, {
     timestamps: true,
-    autoIndex: isDevelopment(),
   });
   s.index(
     {
@@ -64,7 +62,7 @@ export default function init() {
     },
   );
   return {
-    name,
+    name: Login,
     schema: s,
   };
 }

@@ -3,3 +3,5 @@ log:
     port: 7349
     host: 127.0.0.1
     prefix: "spt\t"
+dns:
+  freshInterval: 60000 

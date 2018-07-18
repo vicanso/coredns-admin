@@ -1,10 +1,7 @@
 import mongoose from 'mongoose';
-
-import {isDevelopment} from '../helpers/utils';
+import {User} from './names';
 
 const {Schema} = mongoose;
-
-const name = 'User';
 
 // model的schema定义
 const schema = {
@@ -31,10 +28,9 @@ const schema = {
 export default function init() {
   const s = new Schema(schema, {
     timestamps: true,
-    autoIndex: isDevelopment(),
   });
   return {
     schema: s,
-    name,
+    name: User,
   };
 }

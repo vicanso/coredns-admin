@@ -30,11 +30,7 @@ export default {
     async loadSettings() {
       const close = this.$loading();
       try {
-        const res = await request.get(SETTINGS, {
-          params: {
-            'cache-control': 'no-cache',
-          },
-        });
+        const res = await request.get(SETTINGS);
         this.settings = _.map(res.data.settings, (item) => {
           // eslint-disable-next-line
           item.data = JSON.stringify(item.data, null, 2);

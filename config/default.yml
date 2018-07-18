@@ -14,3 +14,5 @@ adminPath: /admin
 cookieSigKeys:
   - cuttle-fish
   - tree.xie
+dns:
+  freshInterval: 0

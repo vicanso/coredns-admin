@@ -1,8 +1,9 @@
 import _ from 'lodash';
 
 import genService from './gen';
+import {Setting} from '../models/names';
 
-const settingService = genService('Setting');
+const settingService = genService(Setting);
 
 const {find} = settingService;
 
