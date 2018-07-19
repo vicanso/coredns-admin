@@ -9,7 +9,7 @@ export default [
   ],
   [
     'DELETE',
-    '/dns/:id/hosts',
+    '/dns/:id/hosts/:host',
     ['m.admin', 'm.tracker("removeHost")', 'c.dns.removeHost'],
   ],
 ];

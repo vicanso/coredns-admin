@@ -15,4 +15,8 @@ cookieSigKeys:
   - cuttle-fish
   - tree.xie
 dns:
-  freshInterval: 0
+  freshInterval: 1000 
+coredns:
+  # coredns中使用的etcd
+  etcd: 192.168.31.3:2371,192.168.31.3:2372,192.168.31.3:2373
+  path: /coredns
