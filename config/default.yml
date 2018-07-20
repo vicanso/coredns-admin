@@ -5,7 +5,7 @@ log:
 # 程序监控端口
 port: 5018
 # 程序url前缀
-appPrefix: /api
+appPrefix: /coredns
 # mongodb连接串
 mongo: mongodb://127.0.0.1/coredns?connectTimeoutMS=10000
 # redis连接串
@@ -15,7 +15,7 @@ cookieSigKeys:
   - cuttle-fish
   - tree.xie
 dns:
-  freshInterval: 1000 
+  freshInterval: 0 
 coredns:
   # coredns中使用的etcd
   etcd: 192.168.31.3:2371,192.168.31.3:2372,192.168.31.3:2373

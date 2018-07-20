@@ -4,4 +4,4 @@ log:
     host: 127.0.0.1
     prefix: "spt\t"
 dns:
-  freshInterval: 60000 
+  freshInterval: 10000 

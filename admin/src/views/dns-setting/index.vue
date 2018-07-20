@@ -27,9 +27,9 @@
               span(
                 style="margin-right:3px"
               ) {{item.host}}
-              span(v-if="item.status == 1")
+              span.success(v-if="item.status == 1")
                 i.el-icon-circle-check
-              span(v-else-if="item.status == 2")
+              span.fail(v-else-if="item.status == 2")
                 i.el-icon-circle-close
               span(v-else)
                 i.el-icon-question
@@ -153,6 +153,10 @@ ul
 .addSetting, .table
   width: 100%
 a.remove
+  color: $COLOR_RED
+.success
+  color: $COLOR_BLUE
+.fail
   color: $COLOR_RED
 </style>
 <script src="./dns-setting.js"></script>

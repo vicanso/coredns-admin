@@ -91,7 +91,7 @@ export default {
         await request.delete(`${url}/${host}`);
         const found = _.find(this.dnsSettings, item => item.id === id);
         _.remove(found.hosts, item => item.host == host); 
-        form.hosts = found.hosts;
+        form.hosts = found.hosts.slice(0);
       } catch (err) {
         if (err === 'cancel') {
           return;

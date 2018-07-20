@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 
 const env = process.env.NODE_ENV || 'development';
-const appPrefix = process.env.APP_PREFIX || '/api';
+const appPrefix = process.env.APP_PREFIX || '/coredns';
 
 const output = {};
 
@@ -12,7 +12,7 @@ if (env !== 'development') {
 module.exports = {
   devServer: {
     proxy: {
-      '/api': {
+      '/coredns': {
         target: 'http://127.0.0.1:5018',
       },
     },

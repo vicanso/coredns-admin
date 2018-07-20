@@ -19,11 +19,14 @@ dnsService.refresh();
 const dnsFreshInterval = config.get('dns.freshInterval');
 if (dnsFreshInterval) {
   const loop = () => {
-    dnsService.refresh().then(() => {
-      setTimeout(loop, dnsFreshInterval);
-    }).catch(() => {
-      setTimeout(loop, dnsFreshInterval);
-    });
-  }
+    dnsService
+      .refresh()
+      .then(() => {
+        setTimeout(loop, dnsFreshInterval);
+      })
+      .catch(() => {
+        setTimeout(loop, dnsFreshInterval);
+      });
+  };
   setTimeout(loop, dnsFreshInterval);
 }

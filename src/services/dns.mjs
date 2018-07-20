@@ -4,7 +4,6 @@ import request from 'superagent';
 import net from 'net';
 import etcd from 'etcd3';
 
-
 import genService from './gen';
 import {DNS} from '../models/names';
 import * as config from '../config';
@@ -15,7 +14,6 @@ const client = new etcd.Etcd3({
   hosts: config.get('coredns.etcd').split(','),
 });
 const ns = client.namespace(config.get('coredns.path') || '');
-
 
 let dnsStatusDict = {};
 
@@ -137,15 +135,17 @@ async function refreshHost(options) {
     success = await httpCheck(check, domain);
   }
   const domainArr = domain.split('.').reverse();
-  const key = `/${domainArr.join('/')}/dns/apex/${convertDotString(host)}`;
+  const key = `/${domainArr.join('/')}/${convertDotString(host)}`;
   let status = STATUS_UNKNOWN;
   try {
     if (success) {
       // 如果是成功的，则添加记录
-      await ns.put(key).value(JSON.stringify({
-        host,
-        ttl,
-      }));
+      await ns.put(key).value(
+        JSON.stringify({
+          host,
+          ttl,
+        }),
+      );
       status = STATUS_SUCCESS;
     } else {
       // 失败的则删除记录
@@ -202,4 +202,19 @@ export async function refresh() {
   );
   dnsStatusDict = dict;
   // TODO 如果某个domain下面有IP都不可用了，email告警
+}
+
+export async function removeDNSHost(id, host) {
+  const doc = await dnsService.findById(id).lean();
+  if (!doc) {
+    return;
+  }
+  const domainArr = doc.domain.split('.').reverse();
+  const key = `/${domainArr.join('/')}/${convertDotString(host)}`;
+  await ns.delete().key(key);
+  await dnsService.findByIdAndUpdate(id, {
+    $pull: {
+      hosts: host,
+    },
+  });
 }

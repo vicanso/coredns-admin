@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-import dnsService, {listSetting} from '../services/dns';
+import dnsService, {listSetting, removeDNSHost} from '../services/dns';
 
 const schema = {
   domain: () =>
@@ -104,10 +104,6 @@ export async function addHost(ctx) {
 export async function removeHost(ctx) {
   const id = Joi.attempt(ctx.params.id, Joi.objectId());
   const host = Joi.attempt(ctx.params.host, schema.host());
-  await dnsService.findByIdAndUpdate(id, {
-    $pull: {
-      hosts: host,
-    },
-  });
+  await removeDNSHost(id, host);
   ctx.body = null;
 }
