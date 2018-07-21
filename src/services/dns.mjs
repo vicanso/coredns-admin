@@ -205,16 +205,15 @@ export async function refresh() {
 }
 
 export async function removeDNSHost(id, host) {
-  const doc = await dnsService.findById(id).lean();
+  const doc = await dnsService.findById(id);
   if (!doc) {
     return;
   }
   const domainArr = doc.domain.split('.').reverse();
   const key = `/${domainArr.join('/')}/${convertDotString(host)}`;
   await ns.delete().key(key);
-  await dnsService.findByIdAndUpdate(id, {
-    $pull: {
-      hosts: host,
-    },
-  });
+  if (_.includes(doc.hosts, host)) {
+    _.pull(doc.hosts, host);
+    await doc.save();
+  }
 }

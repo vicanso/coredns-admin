@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import _ from 'lodash';
 
 import dnsService, {listSetting, removeDNSHost} from '../services/dns';
 
@@ -87,11 +88,11 @@ export async function addHost(ctx) {
   const {host} = Joi.validate(ctx.request.body, {
     host: schema.host().required(),
   });
-  await dnsService.findByIdAndUpdate(id, {
-    $addToSet: {
-      hosts: host,
-    },
-  });
+  const doc = await dnsService.findById(id);
+  if (!_.includes(doc.hosts, host)) {
+    doc.hosts.push(host);
+    await doc.save();
+  }
   ctx.status = 201;
 }
 
