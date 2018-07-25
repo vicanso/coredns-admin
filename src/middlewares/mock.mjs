@@ -7,7 +7,6 @@ import _ from 'lodash';
 import mockService from '../services/mock';
 
 import * as config from '../config';
-import {getSession} from '../services/cache';
 
 let isStartUpdate = false;
 let mockDict = {};
@@ -56,27 +55,6 @@ export default function getMockMiddleware() {
     if (!mocks) {
       return next();
     }
-    const key = ctx.cookies.get(config.session.key);
-    const userInfo = await getSession(key);
-    const currentAccount = _.get(userInfo, 'user.account');
-    const trackValue = ctx.cookies.get(config.trackCookie);
-    const mock = _.find(mocks, item => {
-      const {track, account} = item;
-      if (track) {
-        return track === trackValue;
-      }
-      if (account) {
-        return account === currentAccount;
-      }
-      return true;
-    });
-    if (!mock) {
-      return next();
-    }
-
-    // 返回配置的mock信息
-    ctx.status = mock.status || 500;
-    ctx.body = mock.response;
-    return Promise.resolve();
+    return next(); 
   };
 }

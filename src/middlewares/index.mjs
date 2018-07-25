@@ -4,7 +4,6 @@ import entry from './entry';
 import error from './error';
 import httpStats from './http-stats';
 import level from './level';
-import * as limit from './limit';
 import mock from './mock';
 import ping from './ping';
 import responseLogger from './response-logger';
@@ -20,7 +19,6 @@ export default {
   error,
   httpStats,
   level,
-  limit,
   mock,
   ping,
   responseLogger,

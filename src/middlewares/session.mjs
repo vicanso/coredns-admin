@@ -8,7 +8,7 @@ import koaSession from 'koa-session';
 import * as config from '../config';
 import errors from '../errors';
 import influx from '../helpers/influx';
-import {sessionStore} from '../helpers/redis';
+import {createSessionStore} from '../helpers/lru';
 
 let sessionMiddleware = null;
 export function init(app) {
@@ -16,7 +16,7 @@ export function init(app) {
     return;
   }
   sessionMiddleware = koaSession(app, {
-    store: sessionStore,
+    store: createSessionStore(1000),
     key: config.session.key,
     maxAge: config.session.maxAge,
     beforeSave: (ctx, session) => {

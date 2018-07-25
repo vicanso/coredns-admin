@@ -1,10 +1,8 @@
 import './init';
 
 import mongo from './helpers/mongo';
-import redis from './helpers/redis';
 
 import * as settingService from './services/setting';
-import * as routeLimiterService from './services/route-limiter';
 import influx from './helpers/influx';
 import dns from './helpers/dns';
 import createServer from './helpers/server';
@@ -18,17 +16,10 @@ function mongodbReady() {
   });
 }
 
-function redisReady() {
-  return new Promise(resolve => {
-    redis.once('connect', resolve);
-  });
-}
 
 Promise.all([
   mongodbReady(),
-  redisReady(),
   settingService.updateAppSettings(),
-  routeLimiterService.updateRouteLimiter(),
 ])
   .then(() => {
     const influxUrl = settingService.get('influx.url');

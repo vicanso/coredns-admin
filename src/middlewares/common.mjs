@@ -9,7 +9,6 @@ import errors from '../errors';
 import influx from '../helpers/influx';
 import * as utils from '../helpers/utils';
 import logger from '../helpers/logger';
-import * as routeLimiterService from '../services/route-limiter';
 
 /**
  * 对于url中的querystring检验，如果有querystring则校验不通过，返回出错。
@@ -171,53 +170,6 @@ const delayUntil = ms => (ctx, next) => {
   });
 };
 
-/**
- * 对路由的访问限制
- */
-const routeLimiter = () => (ctx, next) => {
-  const method = ctx.method.toUpperCase();
-  const layer = _.find(
-    ctx.matched,
-    tmp => _.indexOf(tmp.methods, method) !== -1,
-  );
-  if (!layer || !layer.path) {
-    return next();
-  }
-  const matched = routeLimiterService.getMatched(layer.path, method);
-  if (!matched) {
-    return next();
-  }
-  const now = new Date().toISOString();
-  const {status, date, time} = matched;
-  let timeLimitMatched = false;
-  const forbidden = status === 'disabled';
-  if (date && date.length) {
-    if (now > date[0] && now < date[1]) {
-      timeLimitMatched = true;
-    }
-  } else if (time && time.length) {
-    const timeDesc = now.substring(11, 19);
-    const [startTime, endTime] = time;
-    // 如果开始时间比结束时间还大，表示从startTime到24:00 再由00:00 至 endTime 都符合
-    if (startTime >= endTime) {
-      if (timeDesc > startTime || timeDesc < endTime) {
-        timeLimitMatched = true;
-      }
-    } else if (timeDesc > startTime && timeDesc < endTime) {
-      timeLimitMatched = true;
-    }
-  }
-  // 如果是禁止，而且时间符合，则出错
-  if (timeLimitMatched && forbidden) {
-    throw errors.get('common.routeLimited');
-  }
-  // 如果配置为非禁止，而且时间不符合，则出错
-  if (!forbidden && !timeLimitMatched) {
-    throw errors.get('common.routeLimited');
-  }
-
-  return next();
-};
 
 export default {
   noQuery,
@@ -227,5 +179,4 @@ export default {
   fresh,
   routeStats,
   delayUntil,
-  routeLimiter,
 };

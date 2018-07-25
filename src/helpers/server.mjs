@@ -72,14 +72,6 @@ export default function createServer() {
   // http stats
   app.use(middlewares.httpStats());
 
-  // http connection limit
-  const limitOptions = config.connectLimitOptions;
-  app.use(
-    middlewares.limit.connection(
-      _.omit(limitOptions, 'interval'),
-      limitOptions.interval,
-    ),
-  );
 
   app.use(methodoverride());
   app.use(bodyparser());

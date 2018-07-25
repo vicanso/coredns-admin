@@ -5,7 +5,6 @@ import shortid from 'shortid';
 import errors from '../errors';
 import * as userService from '../services/user';
 import * as config from '../config';
-import {getLoginFailCount, incLoginFailCount} from '../services/limiter';
 /**
  * @swagger
  * parameters:
@@ -210,10 +209,6 @@ export async function login(ctx) {
     account: schema.account().required(),
     password: schema.password().required(),
   });
-  const failCount = await getLoginFailCount(account);
-  if (failCount > 5) {
-    throw errors.get('user.loginFailExceededLimit');
-  }
   let user = null;
   try {
     user = await userService.login({
@@ -222,7 +217,6 @@ export async function login(ctx) {
       token,
     });
   } catch (err) {
-    incLoginFailCount(account);
     throw err;
   }
   ctx.session.user = user;

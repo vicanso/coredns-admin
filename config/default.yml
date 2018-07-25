@@ -8,8 +8,6 @@ port: 5018
 appPrefix: /coredns
 # mongodb连接串
 mongo: mongodb://127.0.0.1/coredns?connectTimeoutMS=10000
-# redis连接串
-redis: redis://127.0.0.1/
 adminPath: /admin
 cookieSigKeys:
   - cuttle-fish

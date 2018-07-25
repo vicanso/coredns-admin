@@ -30,7 +30,6 @@ function addToRouter(category, fns) {
 }
 
 router.addDefault('common', middlewares.common.routeStats());
-router.addDefault('common', middlewares.common.routeLimiter());
 
 addToRouter('c', controllers);
 addToRouter('m.noQuery', middlewares.common.noQuery());

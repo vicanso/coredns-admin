@@ -5,7 +5,6 @@ import * as mock from './mock';
 import * as setting from './setting';
 import * as stats from './stats';
 import * as influx from './influx';
-import * as routeLimiter from './route-limiter';
 import * as dns from './dns';
 
 export default {
@@ -16,6 +15,5 @@ export default {
   setting,
   stats,
   influx,
-  routeLimiter,
   dns,
 };
