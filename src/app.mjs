@@ -16,11 +16,7 @@ function mongodbReady() {
   });
 }
 
-
-Promise.all([
-  mongodbReady(),
-  settingService.updateAppSettings(),
-])
+Promise.all([mongodbReady(), settingService.updateAppSettings()])
   .then(() => {
     const influxUrl = settingService.get('influx.url');
     if (influxUrl) {

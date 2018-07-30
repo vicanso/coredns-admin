@@ -5,6 +5,7 @@ import shortid from 'shortid';
 import errors from '../errors';
 import * as userService from '../services/user';
 import * as config from '../config';
+import * as jwt from '../helpers/jwt';
 /**
  * @swagger
  * parameters:
@@ -83,7 +84,6 @@ function pickUserInfo(userInfos, track) {
   return _.extend(
     {
       anonymous,
-      date: new Date().toISOString(),
       track,
     },
     _.pick(userInfos, keys),
@@ -122,8 +122,8 @@ export async function register(ctx) {
   const doc = await userService.register(data);
   const track = ctx.cookies.get(config.trackCookie);
   const user = pickUserInfo(doc, track);
-  ctx.session.user = user;
   ctx.status = 201;
+  jwt.setXToken(ctx, user);
   ctx.body = user;
   userService.addLoginRecord({
     account: user.account,
@@ -149,9 +149,10 @@ export async function register(ctx) {
  *          $ref: '#/definitions/UserInfo'
  */
 export async function logout(ctx) {
-  delete ctx.session.user;
   const track = ctx.cookies.get(config.trackCookie);
-  ctx.body = pickUserInfo({}, track);
+  const userInfo = pickUserInfo({}, track);
+  jwt.setXToken(ctx, userInfo);
+  ctx.body = userInfo;
 }
 
 /**
@@ -190,18 +191,16 @@ export async function logout(ctx) {
  *          $ref: '#/definitions/UserInfo'
  */
 export function loginToken(ctx) {
-  const {session} = ctx;
   const user = {
     token: shortid(),
   };
-  session.user = user;
+  jwt.setXToken(ctx, user);
   ctx.set('Cache-Control', 'no-store');
   // eslint-disable-next-line
   ctx.body = user;
 }
 export async function login(ctx) {
-  const {session} = ctx;
-  const token = _.get(session, 'user.token');
+  const token = _.get(ctx.state, 'user.token');
   if (!token) {
     throw errors.get('user.tokenIsNull');
   }
@@ -219,9 +218,10 @@ export async function login(ctx) {
   } catch (err) {
     throw err;
   }
-  ctx.session.user = user;
   const track = ctx.cookies.get(config.trackCookie);
-  ctx.body = pickUserInfo(user, track);
+  const userInfo = pickUserInfo(user, track);
+  jwt.setXToken(ctx, userInfo);
+  ctx.body = userInfo;
   userService.addLoginRecord({
     account: user.account,
     userAgent: ctx.get('User-Agent'),
@@ -262,7 +262,7 @@ export function me(ctx) {
     });
   }
   const track = ctx.cookies.get(config.trackCookie);
-  ctx.body = pickUserInfo(ctx.session.user || {}, track);
+  ctx.body = pickUserInfo(ctx.state.user || {}, track);
 }
 
 export function refresh(ctx) {

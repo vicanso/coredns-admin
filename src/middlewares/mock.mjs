@@ -6,8 +6,6 @@ import _ from 'lodash';
 
 import mockService from '../services/mock';
 
-import * as config from '../config';
-
 let isStartUpdate = false;
 let mockDict = {};
 
@@ -55,6 +53,6 @@ export default function getMockMiddleware() {
     if (!mocks) {
       return next();
     }
-    return next(); 
+    return next();
   };
 }

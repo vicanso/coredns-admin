@@ -170,7 +170,6 @@ const delayUntil = ms => (ctx, next) => {
   });
 };
 
-
 export default {
   noQuery,
   deprecate,

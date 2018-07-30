@@ -9,9 +9,9 @@ appPrefix: /coredns
 # mongodb连接串
 mongo: mongodb://127.0.0.1/coredns?connectTimeoutMS=10000
 adminPath: /admin
-cookieSigKeys:
-  - cuttle-fish
-  - tree.xie
+secret:
+  - my-dns
+  - core-dns-admin
 dns:
   freshInterval: 0 
 coredns:

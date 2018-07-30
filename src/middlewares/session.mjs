@@ -3,31 +3,17 @@
  */
 
 import _ from 'lodash';
-import koaSession from 'koa-session';
+import * as jwt from '../helpers/jwt';
 
-import * as config from '../config';
 import errors from '../errors';
 import influx from '../helpers/influx';
-import {createSessionStore} from '../helpers/lru';
 
 let sessionMiddleware = null;
-export function init(app) {
+export function init() {
   if (sessionMiddleware) {
     return;
   }
-  sessionMiddleware = koaSession(app, {
-    store: createSessionStore(1000),
-    key: config.session.key,
-    maxAge: config.session.maxAge,
-    beforeSave: (ctx, session) => {
-      if (!session.createdAt) {
-        // eslint-disable-next-line
-        session.createdAt = new Date().toISOString();
-      }
-      // eslint-disable-next-line
-      session.updatedAt = new Date().toISOString();
-    },
-  });
+  sessionMiddleware = jwt.middleware();
 }
 
 /**
@@ -38,15 +24,12 @@ export function init(app) {
  * @return {Promise}
  */
 const normal = (ctx, next) => {
-  if (ctx.session) {
-    return next();
-  }
   const startedAt = Date.now();
   const {timing} = ctx.state;
   const end = timing.start('session');
   return sessionMiddleware(ctx, () => {
     const use = Date.now() - startedAt;
-    const account = _.get(ctx, 'session.user.account', 'unknown');
+    const account = _.get(ctx, 'state.user.account', 'unknown');
     ctx.state.account = account;
     influx.write(
       'session',
@@ -75,7 +58,7 @@ export const writable = () => normal;
  */
 export const login = () => (ctx, next) =>
   normal(ctx, () => {
-    if (!_.get(ctx, 'session.user.account')) {
+    if (!_.get(ctx, 'state.user.account')) {
       throw errors.get('user.mustLogined');
     }
     return next();
@@ -86,7 +69,7 @@ export const login = () => (ctx, next) =>
  */
 export const anonymous = () => (ctx, next) =>
   normal(ctx, () => {
-    if (_.get(ctx, 'session.user.account')) {
+    if (_.get(ctx, 'state.user.account')) {
       throw errors.get('user.hasLogined');
     }
     return next();
@@ -95,10 +78,10 @@ export const anonymous = () => (ctx, next) =>
 function roleValidate(roles) {
   return () => (ctx, next) =>
     normal(ctx, () => {
-      if (!_.get(ctx, 'session.user.account')) {
+      if (!_.get(ctx, 'state.user.account')) {
         throw errors.get('user.mustLogined');
       }
-      const {user} = ctx.session;
+      const {user} = ctx.state;
       const rolesDesc = roles.join(' ');
       if (!_.find(user.roles, role => rolesDesc.indexOf(role) !== -1)) {
         throw errors.get('user.forbidden');
