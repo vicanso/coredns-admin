@@ -204,6 +204,7 @@ export async function refresh() {
   // TODO 如果某个domain下面有IP都不可用了，email告警
 }
 
+// 删除dns
 export async function removeDNSHost(id, host) {
   const doc = await dnsService.findById(id);
   if (!doc) {
@@ -216,4 +217,37 @@ export async function removeDNSHost(id, host) {
     _.pull(doc.hosts, host);
     await doc.save();
   }
+}
+
+// 列出当前coredns中有效的DNS配置
+// 有可能直接添加至coredns，并未通过管理后台添加，则在管理后台并无记录
+export async function listAvailableDNSHost() {
+  const data = await ns.getAll();
+  const result = {};
+  _.forEach(data, (v, k) => {
+    const arr = k.split('/');
+    // 将前端标记的删除
+    arr.pop();
+    arr.shift();
+
+    const domain = arr.reverse().join('.');
+    if (!result[domain]) {
+      result[domain] = [];
+    }
+    const value = JSON.parse(v);
+    result[domain].push(
+      _.extend(
+        {
+          key: k,
+        },
+        value,
+      ),
+    );
+  });
+  return result;
+}
+
+// 删除可用的host
+export async function removeAvailableDNSHost(key)  {
+  await ns.delete().key(key);
 }

@@ -1,7 +1,12 @@
 import Joi from 'joi';
 import _ from 'lodash';
 
-import dnsService, {listSetting, removeDNSHost} from '../services/dns';
+import dnsService, {
+  listSetting,
+  removeDNSHost,
+  listAvailableDNSHost,
+  removeAvailableDNSHost,
+} from '../services/dns';
 
 const schema = {
   domain: () =>
@@ -22,6 +27,9 @@ const schema = {
     Joi.string()
       .trim()
       .ip(),
+  key: () =>
+    Joi.string()
+      .trim(),
   disabled: () => Joi.boolean().default(false),
 };
 
@@ -106,5 +114,31 @@ export async function removeHost(ctx) {
   const id = Joi.attempt(ctx.params.id, Joi.objectId());
   const host = Joi.attempt(ctx.params.host, schema.host());
   await removeDNSHost(id, host);
+  ctx.body = null;
+}
+
+/**
+ * @swagger
+ *  /available-dns
+ *  get:
+ *    description: 获取可用的dns配置
+ */
+export async function listAvailable(ctx) {
+  ctx.body = await listAvailableDNSHost();
+}
+
+/**
+ * @swagger
+ *  /available-dns/:key
+ *  delete:
+ *    description: 删除可用的DNS配置
+ */
+export async function removeAvailable(ctx) {
+  const {
+    key,
+  } = Joi.validate(ctx.query, {
+    key: schema.key().required(),
+  });
+  await removeAvailableDNSHost(key);
   ctx.body = null;
 }

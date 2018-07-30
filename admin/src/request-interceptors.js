@@ -5,7 +5,7 @@ import {urlPrefix} from './config';
 const authToken = 'x-auth-token';
 let currentAuthToken = localStorage.getItem(authToken);
 
-request.interceptors.request.use(config  => {
+request.interceptors.request.use(config => {
   if (!config.timeout) {
     config.timeout = 10 * 1000;
   }

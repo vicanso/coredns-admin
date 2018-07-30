@@ -83,9 +83,22 @@
       label="Check"
     )
       el-input(
-        v-model="form.check"
-        placeholder="http://${domain}/ping or tcp://${domain}:5018"
+        v-model="form.checkPath"
+        placeholder="${domain}/ping or ${domain}:5018"
       )
+        el-select.checkTypeSelector(
+          v-model="form.checkType"
+          slot="prepend"
+          placeholder="Select type"
+        )
+          el-option(
+            label='HTTP'
+            value='http://'
+          )
+          el-option(
+            label='TCP'
+            value='tcp://'
+          )
     el-form-item(
       label="TTL"
     )
@@ -150,6 +163,8 @@ ul
   width: 800px
   padding: 40px 20px 20px
   margin: auto
+.checkTypeSelector
+  width: 100px
 .addSetting, .table
   width: 100%
 a.remove

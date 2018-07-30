@@ -19,7 +19,7 @@
           type="text"
           @click="userLogout"
         ) logout
-    .logo SPT 
+    .logo CoreDNS 
 </template>
 <style lang="sass" scoped>
 @import "../variables";
@@ -33,6 +33,7 @@
   border-bottom: $GRAY_BORDER
   z-index: 9
   line-height: $MAIN_HEADER_HEIGHT
+  overflow: hidden
   .logo
     width: $MAIN_NAV_WIDTH
     background-color: $COLOR_BLACK

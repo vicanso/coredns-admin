@@ -32,6 +32,14 @@ export default {
     },
     edit(id) {
       this.form = _.cloneDeep(_.find(this.dnsSettings, item => item.id === id));
+      if (this.form) {
+        const {
+          check,
+        } = this.form;
+        const arr = check.split('://');
+        this.form.checkPath = arr[1];
+        this.form.checkType = `${arr[0]}://`;
+      }
       this.mode = 1;
     },
     add() {
@@ -44,15 +52,17 @@ export default {
       } = this;
       const {
         domain,
-        check, 
         ttl,
         disabled,
         id,
+        checkType,
+        checkPath,
       } = form;
-      if (!domain || !check) {
+      if (!domain || !checkPath || !checkType) {
         this.$error('domain and check can\'t be null');
         return;
       }
+      form.check = checkType + checkPath;
       const close = this.$loading();
       try {
         if (id) {
@@ -63,7 +73,7 @@ export default {
         } else {
           await request.post(DNS_SETTINGS, {
             domain,
-            check,
+            check: form.check,
             ttl,
             disabled,
           });

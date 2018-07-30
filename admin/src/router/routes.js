@@ -1,45 +1,34 @@
-import Setting from '../views/setting';
 import Register from '../views/register';
 import Login from '../views/login';
-import Mock from '../views/mock';
-import Tracker from '../views/tracker';
-import RouteLimiter from '../views/route-limiter';
 import DNSSetting from '../views/dns-setting';
+import AvailableDNS from '../views/available-dns';
+
+export const Routes = {
+  DNSSetting: 'dns-setting',
+  AvailableDNS: 'available-dns',
+  Register: 'register',
+  Login: 'login',
+};
 
 export default [
   {
-    name: 'dns-setting',
+    name: Routes.DNSSetting,
     path: '/dns-setting',
     component: DNSSetting,
   },
   {
-    name: 'register',
+    name: Routes.AvailableDNS,
+    path: '/available-dns',
+    component: AvailableDNS,
+  },
+  {
+    name: Routes.Register,
     path: '/register',
     component: Register,
   },
   {
-    name: 'setting',
-    path: '/setting',
-    component: Setting,
-  },
-  {
-    name: 'login',
+    name: Routes.Login,
     path: '/login',
     component: Login,
-  },
-  {
-    name: 'mock',
-    path: '/mock',
-    component: Mock,
-  },
-  {
-    name: 'tracker',
-    path: '/tracker',
-    component: Tracker,
-  },
-  {
-    name: 'route-limiter',
-    path: '/route-limiter',
-    component: RouteLimiter,
   },
 ];
