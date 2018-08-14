@@ -10,6 +10,7 @@ script:
   - npm test
 
 after_success:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker build -t coredns-admin .
   - docker tag coredns-admin $DOCKER_USERNAME/coredns-admin
   - docker tag coredns-admin $DOCKER_USERNAME/coredns-admin
