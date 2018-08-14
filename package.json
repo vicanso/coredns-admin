@@ -34,7 +34,7 @@
     "jest": "node node_modules/.bin/jest dist/*.test.js dist/*/*.test.js",
     "precommit": "npm run lint",
     "start": "node --experimental-modules app",
-    "test": "npm run lint && npm run build && NODE_ENV=test INFLUX=http://127.0.0.1:8086/coredns-admin npm run jest",
+    "test": "npm run lint",
     "gen-version": "node --experimental-modules build/gen-version",
     "update": "node --experimental-modules build/update.mjs"
   },

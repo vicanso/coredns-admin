@@ -1,0 +1,17 @@
+sudo: false
+language: node_js
+node_js:
+  - "10"
+
+services:
+  - docker
+
+script:
+  - npm test
+
+after_success:
+  - docker build -t coredns-admin .
+  - docker tag coredns-admin $DOCKER_USERNAME/coredns-admin
+  - docker tag coredns-admin $DOCKER_USERNAME/coredns-admin
+  - docker push $DOCKER_USERNAME/coredns-admin 
+  - docker images
