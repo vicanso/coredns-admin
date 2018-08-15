@@ -158,6 +158,22 @@ async function refreshHost(options) {
   return status;
 }
 
+function dnsAlert(data) {
+  const url = config.get('alert');
+  if (!url) {
+    console.error(`dns all fail, %j`, data);
+    return;
+  }
+  request
+    .post(url)
+    .send(data)
+    .catch(err => {
+      if (err) {
+        console.error(`alert fail, ${err.message}`);
+      }
+    });
+}
+
 /**
  * 刷新coredns中DNS解析配置
  */
@@ -201,7 +217,20 @@ export async function refresh() {
     },
   );
   dnsStatusDict = dict;
-  // TODO 如果某个domain下面有IP都不可用了，email告警
+  _.forEach(dict, (hosts, domain) => {
+    let count = 0;
+    _.forEach(hosts, status => {
+      if (status === STATUS_SUCCESS) {
+        count += 1;
+      }
+    });
+    if (count === 0) {
+      dnsAlert({
+        domain,
+        ips: _.keys(hosts),
+      });
+    }
+  });
 }
 
 // 删除dns
@@ -248,6 +277,6 @@ export async function listAvailableDNSHost() {
 }
 
 // 删除可用的host
-export async function removeAvailableDNSHost(key)  {
+export async function removeAvailableDNSHost(key) {
   await ns.delete().key(key);
 }

@@ -27,9 +27,7 @@ const schema = {
     Joi.string()
       .trim()
       .ip(),
-  key: () =>
-    Joi.string()
-      .trim(),
+  key: () => Joi.string().trim(),
   disabled: () => Joi.boolean().default(false),
 };
 
@@ -134,9 +132,7 @@ export async function listAvailable(ctx) {
  *    description: 删除可用的DNS配置
  */
 export async function removeAvailable(ctx) {
-  const {
-    key,
-  } = Joi.validate(ctx.query, {
+  const {key} = Joi.validate(ctx.query, {
     key: schema.key().required(),
   });
   await removeAvailableDNSHost(key);

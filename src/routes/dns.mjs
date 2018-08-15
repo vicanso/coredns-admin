@@ -13,9 +13,5 @@ export default [
     ['m.admin', 'm.tracker("removeHost")', 'c.dns.removeHost'],
   ],
   ['GET', '/available-dns', ['m.noQuery', 'm.admin', 'c.dns.listAvailable']],
-  [
-    'DELETE',
-    '/available-dns',
-    ['m.admin', 'c.dns.removeAvailable'],
-  ],
+  ['DELETE', '/available-dns', ['m.admin', 'c.dns.removeAvailable']],
 ];
