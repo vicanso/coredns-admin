@@ -4,6 +4,7 @@ ADD ./ /app
 
 RUN cd /app/admin \
   && yarn install && yarn build \
+  && mv ./dist/fonts ./dist/css/ \
   && rm -rf node_modules/ \
   && cd .. \
   && yarn install --production \
