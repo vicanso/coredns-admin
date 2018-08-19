@@ -49,6 +49,10 @@ if (isDevelopment()) {
 if (logConfig.udp) {
   trans.push(new UDPTransport(logConfig.udp));
 }
+// 配置输出至console
+if (logConfig.console) {
+  trans.push(new transports.Console());
+}
 
 const logger = createLogger({
   level: logLevel,
