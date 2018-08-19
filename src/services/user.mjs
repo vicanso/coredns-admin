@@ -14,7 +14,7 @@ const loginService = genService(Login);
 
 export default userService;
 
-async function exists(condition) {
+export async function exists(condition) {
   return userService.findOne(condition, 'account').then(doc => !_.isNil(doc));
 }
 
