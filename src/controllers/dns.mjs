@@ -16,7 +16,6 @@ const schema = {
   ttl: () =>
     Joi.number()
       .integer()
-      .default(60)
       .min(1)
       .max(600),
   check: () =>
